@@ -11,7 +11,7 @@ from __future__ import annotations
 import json
 import logging
 import os
-from typing import AsyncIterator
+from typing import AsyncIterator, Literal
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -43,6 +43,7 @@ app.add_middleware(
 class ResearchRequest(BaseModel):
     question: str = Field(..., min_length=3, max_length=2000)
     thread_id: str | None = Field(default=None, max_length=128)
+    mode: Literal["online", "offline"] = "online"
 
 
 # ---------- SSE helpers ----------------------------------------------------
@@ -52,16 +53,16 @@ def _sse(event: str, data: dict | str) -> str:
     return f"event: {event}\ndata: {payload}\n\n"
 
 
-async def _stream_research(question: str, thread_id: str) -> AsyncIterator[str]:
+async def _stream_research(question: str, thread_id: str, mode: str = "online") -> AsyncIterator[str]:
     graph = get_app()
-    config = {"configurable": {"thread_id": thread_id}}
+    config = {"configurable": {"thread_id": thread_id, "mode": mode}}
     final_report: str = ""
 
-    yield _sse("start", {"question": question, "thread_id": thread_id})
+    yield _sse("start", {"question": question, "thread_id": thread_id, "mode": mode})
 
     try:
         async for event in graph.astream(
-            {"question": question, "iterations": 0},
+            {"question": question, "iterations": 0, "mode": mode},
             config=config,
             stream_mode="updates",
         ):
@@ -112,9 +113,9 @@ async def research(req: ResearchRequest) -> StreamingResponse:
     if not req.question.strip():
         raise HTTPException(status_code=400, detail="question is empty")
     thread_id = req.thread_id or "anon"
-    log.info("research request: thread=%s q=%r", thread_id, req.question)
+    log.info("research request: thread=%s mode=%s q=%r", thread_id, req.mode, req.question)
     return StreamingResponse(
-        _stream_research(req.question, thread_id),
+        _stream_research(req.question, thread_id, req.mode),
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )

@@ -6,12 +6,13 @@ concurrent nodes append instead of overwriting each other.
 from __future__ import annotations
 
 from operator import add
-from typing import Annotated, Any, TypedDict
+from typing import Annotated, Any, Literal, TypedDict
 
 
 class ResearchState(TypedDict, total=False):
     # Inputs
     question: str
+    mode: Literal["online", "offline"]
 
     # Planner output
     sub_questions: list[str]

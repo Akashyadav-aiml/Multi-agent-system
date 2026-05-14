@@ -54,15 +54,39 @@ def _safe_json(s: str) -> dict | str:
 
 st.set_page_config(page_title="Deep Research Agent", page_icon="🔬", layout="wide")
 
-st.title("🔬 Deep Research Agent")
-st.caption("CrewAI + LangGraph + pgvector + Gemini — answers arXiv research questions with cited sources.")
+_title_col, _mode_col = st.columns([3, 1])
+with _title_col:
+    st.title("🔬 Deep Research Agent")
+    st.caption("CrewAI + LangGraph + pgvector + Gemini — answers arXiv research questions with cited sources.")
+with _mode_col:
+    st.write("")  # vertical spacer to align with title baseline
+    try:
+        mode = st.segmented_control(
+            "Mode",
+            options=["online", "offline"],
+            format_func=lambda m: "🌐 Online" if m == "online" else "💾 Offline",
+            default="online",
+            label_visibility="collapsed",
+        )
+    except AttributeError:
+        # Older Streamlit (< 1.40): fall back to horizontal radio.
+        mode = st.radio(
+            "Mode",
+            options=["online", "offline"],
+            format_func=lambda m: "🌐 Online" if m == "online" else "💾 Offline",
+            index=0,
+            horizontal=True,
+            label_visibility="collapsed",
+        )
+    if mode is None:
+        mode = "online"
 
 # Health badge
 try:
     h = requests.get(f"{BACKEND_URL}/health", timeout=5).json()
     badge = "🟢" if h.get("status") == "ok" else "🔴"
     pg = "✅" if h.get("pgvector") else "⚠️"
-    st.caption(f"{badge} backend `{BACKEND_URL}` · model `{h.get('model','?')}` · pgvector {pg}")
+    st.caption(f"{badge} backend `{BACKEND_URL}` · model `{h.get('model','?')}` · pgvector {pg} · mode `{mode}`")
 except Exception as e:
     st.caption(f"🔴 backend unreachable at `{BACKEND_URL}` ({e})")
 
@@ -90,7 +114,7 @@ if go:
     try:
         with requests.post(
             f"{BACKEND_URL}/research",
-            json={"question": question, "thread_id": f"st-{int(started_at)}"},
+            json={"question": question, "thread_id": f"st-{int(started_at)}", "mode": mode},
             stream=True,
             timeout=REQUEST_TIMEOUT,
             headers={"Accept": "text/event-stream"},
