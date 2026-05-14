@@ -1,0 +1,42 @@
+[project]
+name = "deep-research-agent"
+version = "1.0.0"
+description = "Multi-agent research system over arXiv (CrewAI + LangGraph + pgvector + Gemini)."
+requires-python = ">=3.11,<3.13"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [
+    "_zip_tmp",
+    "mnt",
+    ".specify",
+    ".claude",
+    "data",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+ignore = [
+    "E501",  # line length — ruff-format owns this
+    "B008",  # function calls in defaults (FastAPI / typer idiom)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/*" = ["B011"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+markers = [
+    "integration: needs live pgvector and API keys",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]

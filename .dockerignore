@@ -1,0 +1,52 @@
+# --- VCS ---
+.git
+.gitignore
+.github
+
+# --- Python ---
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+.ruff_cache
+.mypy_cache
+.coverage
+htmlcov
+
+# --- Virtual envs ---
+.venv
+venv
+env
+
+# --- Secrets / env ---
+.env
+.env.*
+!.env.example
+
+# --- Docs / planning ---
+*.md
+docs
+
+# --- Tests ---
+tests
+
+# --- Frontend (separate image) ---
+frontend
+
+# --- Data ---
+data
+*.zip
+deep-research-agent.zip
+
+# --- Local artifacts ---
+.llm_cache.db
+_zip_tmp
+mnt
+.specify
+.claude
+
+# --- IDE ---
+.vscode
+.idea
+.DS_Store
+Thumbs.db

@@ -1,0 +1,52 @@
+[
+  {
+    "question": "What is the standard chunk overlap percentage for RAG, and why?",
+    "ground_truth": "10–20% overlap between adjacent chunks is the common recommendation. It preserves context across chunk boundaries so claims split at the cut still appear in at least one chunk.",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question": "How does reranking improve over plain vector similarity in RAG pipelines?",
+    "ground_truth": "Vector similarity is fast but imprecise because embeddings compress meaning into a few hundred numbers. A reranker scores (query, chunk) pairs more carefully — typically a cross-encoder — and is run only on the top-K candidates from vector search to trade a small latency cost for higher precision.",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question": "What is mixture-of-experts (MoE) and what is its main efficiency benefit?",
+    "ground_truth": "MoE replaces a dense feed-forward layer with many smaller 'expert' subnetworks plus a router that activates only a few experts per token. This decouples model capacity from per-token compute, so a large MoE model can have many parameters but run at the FLOPs of a much smaller dense model.",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question": "Compare LoRA and full fine-tuning for adapting large language models.",
+    "ground_truth": "Full fine-tuning updates all model weights and needs as much memory as training. LoRA freezes the base model and trains small low-rank adapter matrices added to selected layers, cutting trainable parameter count by 10–1000x and enabling fine-tuning on a single GPU. Quality is usually close to full fine-tuning for adaptation tasks, but full fine-tuning still wins for large domain shifts.",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question": "What does the Ragas 'faithfulness' metric measure?",
+    "ground_truth": "Faithfulness measures whether the answer's claims are supported by the retrieved context. A claim is faithful if it can be inferred from the provided context; unsupported claims indicate hallucination. Ragas uses an LLM-as-judge to extract claims and verify each.",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question": "Why is the Model Context Protocol (MCP) a useful standard for agents?",
+    "ground_truth": "MCP defines a single protocol for exposing tools, resources, and prompts from a server, so any MCP-compatible client (Claude Desktop, Cursor, IDE plugins, agent frameworks) can consume the same tool implementation. It eliminates re-wrapping the same tool per framework.",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question": "What is contextual retrieval (Anthropic 2024), and what problem does it solve?",
+    "ground_truth": "Contextual retrieval prepends a short LLM-generated description of a chunk's surrounding context to the chunk before embedding. This reduces retrieval failures caused by chunks that lose meaning when separated from their document, improving recall on benchmarks by a measurable margin.",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question": "What is the ReAct pattern and where does it show up in agent frameworks?",
+    "ground_truth": "ReAct interleaves Reasoning and Acting: the LLM produces a thought, picks an action (tool call), observes the result, then loops. CrewAI, LangChain agents, and most other frameworks implement this loop, optionally with a max-iterations cap to prevent infinite reasoning.",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question": "What is IVFFlat indexing in pgvector and when should you use it?",
+    "ground_truth": "IVFFlat partitions the vector space into clusters; queries scan only the most relevant clusters instead of every row. It is approximate (small recall loss) but 50–100x faster than sequential scan at scale. Use it once you have enough vectors (~10K+); below that, sequential scan is fine.",
+    "expected_arxiv_ids": []
+  },
+  {
+    "question": "Why use a state graph (LangGraph) instead of a sequential CrewAI process for complex agent workflows?",
+    "ground_truth": "Sequential crews can't express loops, conditional branches, or parallel fan-out cleanly. LangGraph's StateGraph models nodes, edges, and conditional routing explicitly, supports checkpointing for resumable runs, and exposes streaming at the node level — necessary for production patterns like fact-check loops and parallel research.",
+    "expected_arxiv_ids": []
+  }
+]

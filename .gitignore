@@ -1,0 +1,52 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- Virtual envs ---
+.venv/
+venv/
+env/
+
+# --- Secrets / local env ---
+.env
+.env.*
+!.env.example
+
+# --- IDE / editor ---
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# --- Project artifacts ---
+data/eval_results/
+data/papers/*
+!data/papers/.gitkeep
+.llm_cache.db
+_zip_tmp/
+mnt/
+
+# --- Build outputs ---
+*.zip
+
+# --- Logs ---
+*.log
+logs/
+
+# --- Docker ---
+.docker/
+
+# --- Streamlit ---
+.streamlit/secrets.toml

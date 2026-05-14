@@ -1,0 +1,53 @@
+# --- Core agent frameworks ---
+crewai>=0.80.0
+crewai-tools>=0.14.0
+
+# --- LLM + embeddings (Google Gemini, free tier) ---
+langchain-google-genai>=2.0.0
+langchain-core>=0.3.0
+
+# --- Vector DB (pgvector) ---
+langchain-postgres>=0.0.12
+psycopg[binary]>=3.2.0
+pgvector>=0.3.0
+
+# --- Text processing ---
+langchain-text-splitters>=0.3.0
+
+# --- arXiv API ---
+arxiv>=2.1.0
+
+# --- Utilities ---
+pydantic>=2.7
+python-dotenv>=1.0
+typer>=0.12
+pytest>=8.0
+
+# --- Week 4: MCP server ---
+mcp>=1.0.0
+
+# --- Week 5: LangGraph ---
+langgraph>=0.2.50
+langchain-community>=0.3.0
+
+# --- Week 6: Evals ---
+ragas>=0.2.0
+langfuse>=2.50.0
+datasets>=2.20.0
+
+# --- Week 8: API serving ---
+fastapi>=0.115
+uvicorn[standard]>=0.32
+
+# --- Optional: local LLM via Ollama (see docs/APPENDIX-OLLAMA.md) ---
+# Uncomment if you want to run fully local:
+# langchain-ollama>=0.2.0
+
+# --- Optional: extra LLM providers (LiteLLM handles them on the CrewAI side
+#     automatically; these are only needed for the langchain ChatModel path) ---
+# langchain-anthropic>=0.2.0
+# langchain-openai>=0.2.0
+# langchain-groq>=0.2.0
+
+# --- Reranker (optional; vector_search no-ops gracefully without it) ---
+cohere>=5.11.0
